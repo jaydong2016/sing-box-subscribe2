@@ -1,251 +1,226 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <title>生成 Sing-Box 配置</title>
     <link rel="icon" href="https://raw.githubusercontent.com/Toperlock/sing-box-subscribe/main/public/favicon.ico" type="image/x-icon">
-    <title>生成sing-box配置</title>
+    <!-- Google Fonts: Roboto + Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <style>
+        /* -------------------------
+           Material Design 3 Expressive 基础样式
+        ------------------------- */
+        :root {
+            --md3-primary: #6750a4;
+            --md3-on-primary: #ffffff;
+            --md3-secondary: #625b71;
+            --md3-on-secondary: #ffffff;
+            --md3-surface: #ffffff;
+            --md3-on-surface: #1c1b1f;
+            --md3-error: #b3261e;
+            --md3-on-error: #ffffff;
+            --md3-radius: 16px;
+            --md3-elevation: 4px;
+            --md3-shadow-color: rgba(0, 0, 0, 0.15);
+            --ripple-color: rgba(255, 255, 255, 0.3);
+        }
+
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f2f2f2;
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            color: #2d3436;
-            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            padding: 24px;
         }
 
         .container {
-            width: 90%;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin: 2rem 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            width: 100%;
+            max-width: 900px;
+            gap: 24px;
         }
 
         h1 {
-            color: #4a90e2;
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            position: relative;
+            font-weight: 700;
+            color: var(--md3-on-surface);
+            font-size: 28px;
+            margin: 0 0 16px 0;
         }
 
-        h1::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: #6c5ce7;
-            margin: 0.5rem auto;
-            border-radius: 2px;
+        /* -------------------------
+           卡片效果
+        ------------------------- */
+        .card {
+            background-color: var(--md3-surface);
+            border-radius: var(--md3-radius);
+            box-shadow: 0 var(--md3-elevation) var(--md3-elevation*2) var(--md3-shadow-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
+        /* -------------------------
+           输入框
+        ------------------------- */
         textarea {
             width: 100%;
             min-height: 200px;
-            padding: 1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: var(--md3-radius);
+            border: 1px solid #ccc;
+            padding: 12px;
             font-family: monospace;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
-            margin: 0 auto;
+            font-size: 14px;
+            background-color: #fafafa;
+            resize: vertical;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: var(--md3-primary);
+            box-shadow: 0 0 0 2px rgba(103,80,164,0.2);
         }
 
-        textarea:focus {
-            border-color: #4a90e2;
-            box-shadow: 0 0 10px rgba(74, 144, 226, 0.2);
+        /* -------------------------
+           按钮
+        ------------------------- */
+        button, input[type="submit"] {
+            position: relative;
+            overflow: hidden;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            border: none;
+            border-radius: var(--md3-radius);
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: all 0.2s;
             outline: none;
         }
 
-        .button-group {
-            display: flex;
-            gap: 1rem;
-            margin: 1.5rem 0;
-            flex-wrap: wrap;
-            justify-content: center;
+        button {
+            background-color: var(--md3-secondary);
+            color: var(--md3-on-secondary);
+        }
+        button:hover {
+            background-color: #7c7591;
         }
 
-        button, input[type="submit"] {
-            background: #4a90e2;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
+        input[type="submit"] {
+            background-color: var(--md3-primary);
+            color: var(--md3-on-primary);
+        }
+        input[type="submit"]:hover {
+            background-color: #886dcf;
         }
 
-        button:hover, input[type="submit"]:hover {
-            background: #6c5ce7;
-            transform: translateY(-2px);
+        /* ripple effect */
+        button::after, input[type="submit"]::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            opacity: 0.6;
+            pointer-events: none;
+            background-color: var(--ripple-color);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        button:active::after, input[type="submit"]:active::after {
+            transform: scale(4);
+            opacity: 0;
+            transition: 0s;
         }
 
         select {
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            background: white;
-            font-size: 1rem;
-            margin-right: 1rem;
-            transition: all 0.3s ease;
+            padding: 10px;
+            background-color: var(--md3-surface);
+            color: var(--md3-on-surface);
+            border: 1px solid #ccc;
+            border-radius: var(--md3-radius);
         }
 
-        select:focus {
-            border-color: #4a90e2;
-            outline: none;
+        /* -------------------------
+           Instructions
+        ------------------------- */
+        .instructions {
+            font-size: 14px;
+            color: var(--md3-on-surface);
+            line-height: 1.5;
+        }
+        .instructions span {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .instructions .error {
+            color: var(--md3-error);
+            font-weight: 600;
         }
 
-        .config-content {
-            margin-top: 2rem;
-            background: rgba(245, 247, 250, 0.9);
-            padding: 1.5rem;
-            border-radius: 8px;
-            width: 100%;
+        /* -------------------------
+           预览输出
+        ------------------------- */
+        #config-text {
+            min-height: 150px;
+            padding: 12px;
+            background-color: #fafafa;
+            border-radius: var(--md3-radius);
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
         }
 
-        .config-content h3 {
-            margin: 1rem 0;
-            font-size: 1rem;
-            padding: 0.8rem;
-            border-left: 4px solid #4a90e2;
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .config-content a {
-            color: #6c5ce7;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .config-content a:hover {
-            color: #4a90e2;
-            text-decoration: underline;
-        }
-
+        /* -------------------------
+           响应式适配
+        ------------------------- */
         @media (max-width: 768px) {
             .container {
-                width: 95%;
-                padding: 1rem;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            textarea {
-                min-height: 150px;
-            }
-
-            .button-group {
-                flex-direction: column;
-                align-items: center;
+                padding: 16px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="right-box">
-            <h1>生成sing-box配置</h1>
-
-            <!-- 新增：网址生成部分 -->
-            <div style="width: 100%; margin-bottom: 1.5rem;">
-                <label for="url-suffix" style="font-weight: bold; display: block; margin-bottom: 0.5rem;">输入订阅链接网址：</label>
-                <div style="display: flex; gap: 0.5rem;">
-                    <input 
-                        type="text" 
-                        id="url-suffix" 
-                        placeholder="支持填入 Base64 的 http/s 订阅链接" 
-                        style="flex: 1; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;"
-                    >
-                    <button 
-                        onclick="generateFullUrl()" 
-                        style="background: #4a90e2; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer;"
-                    >
-                        生成 sing-box 1.12 订阅
-                    </button>
-                </div>
-                <p id="full-url" style="margin-top: 0.5rem; font-size: 0.9rem; color: #666;"></p>
-            </div>
-
-            <div style="width: 100%; margin-bottom: 1.5rem;">
-                <label for="url-suffix" style="font-weight: bold; display: block; margin-bottom: 0.5rem;">以下为独立操作，可选择生成配置文件版本：</label>
-                <p id="full-url" style="margin-top: 0.5rem; font-size: 0.9rem; color: #666;"></p>
-            </div>
-
-
-            <!-- 原有表单部分 -->
+        <!-- JSON 编辑卡片 -->
+        <div class="card">
+            <h1>Edit TEMP_JSON_DATA</h1>
             <form id="temp-json-form" method="POST" action="/edit_temp_json">
-                <textarea 
-                    name="temp_json_data" 
-                    placeholder="在此粘贴您的JSON配置..."
-                    spellcheck="false"
-                >{{ temp_json_data | default('') }}</textarea>
-                
-                <div class="button-group">
-                    <input type="submit" value="保存">
-                </div>
+                <textarea name="temp_json_data">{{ temp_json_data | default('') }}</textarea>
+                <input type="submit" value="Save">
             </form>
-
-            <div class="form-container">
-                <form method="POST" action="/generate_config">
-                    <div class="button-group">
-                        <select name="template_index">
-                            {% for option in template_options %}
-                            <option value="{{ loop.index - 1 }}">{{ option }}</option>
-                            {% endfor %}
-                        </select>
-                        <input type="submit" value="生成配置文件">
-                    </div>
-                </form>
-            </div>
-
-            <div class="config-content">
-                <h3><a href="https://github.com/Toperlock/sing-box-subscribe#%E9%A1%B5%E9%9D%A2%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4" target="_blank" rel="noopener noreferrer">请务必：点击查看操作说明！！！</a></h3>
-                <h3><a href="https://github.com/Toperlock/sing-box-subscribe/tree/main/instructions#steps-for-page-manipulation" target="_blank" rel="noopener noreferrer">Please be sure to: Click to view operation instructions!!!</a></h3>
-                <!-- 其他说明内容保持不变 -->
-            </div>
+            <button onclick="toggleLanguage()">Switch Language</button>
+            <form method="POST" action="/generate_config" style="display: flex; gap: 12px; align-items: center;">
+                <select name="template_index">
+                    {% for option in template_options %}
+                    <option value="{{ loop.index - 1 }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Select and Generate">
+            </form>
         </div>
+
+        <!-- 指南/说明卡片 -->
+        <div class="card instructions">
+            <span data-translate="1">前提：在此网页正确填写订阅链接，生成配置失败是因为同一时间别人也在生成配置，导致你填写的内容被复原。建议使用/config/URL的形式</span>
+            <span data-translate="3" class="error">提醒: 点击保存后请立即生成配置文件！！！</span>
+            <span data-translate="5">“订阅地址”是以 "http://" 开头的【包含】节点信息的v2/clash链接或者是以 "vmess://","hysteria2://"... 之类开头的单条URI节点链接，多条URI请在每条末尾添加换行符: \n 代替换行（请你明白json写法规范），也可以填写base64内容</span>
+            <span data-translate="9" class="error">机场订阅里有hy2新协议，请修改 "User-Agent" 为：clashmeta。球球你了，别塞文件大于1MB的clash，你只需要保留proxies字段，别写那破鸡巴规则了，vercel服务器解析超时了懂吗老弟</span>
+        </div>
+
+        <!-- 输出配置 -->
+        <pre id="config-text" class="card"></pre>
     </div>
+
     <script>
-        // 新增：生成完整网址的函数
- async function generateFullUrl() {
-    // 获取当前网站的域名和协议作为基础 URL
-    const baseUrl = `${window.location.origin}/config/`;
-    const suffix = document.getElementById('url-suffix').value.trim();
-
-    if (suffix) {
-        const fullUrl = `${baseUrl}${suffix}`;
-        document.getElementById('full-url').textContent = `sing-box 订阅网址：${fullUrl}`;
-
-        try {
-            await navigator.clipboard.writeText(fullUrl);
-            alert('完整网址已复制到剪贴板！');
-        } catch (err) {
-            alert('复制到剪贴板失败！请手动复制。' + err);
-        }
-    } else {
-        document.getElementById('full-url').textContent = '请输入有效的网址后缀！';
-    }
-}
-
-
-        // 原有JavaScript逻辑保持不变
-        const initialTempJsonData = '{"subscribes":[{"url":"URL","tag":"tag_1","enabled":true,"emoji":0,"subgroup":"","prefix":"","User-Agent":"v2rayng"},{"url":"URL","tag":"tag_2","enabled":false,"emoji":0,"subgroup":"命名/named","prefix":"❤️","User-Agent":"clashmeta"}],"auto_set_outbounds_dns":{"proxy":"","direct":""},"save_config_path":"./config.json","auto_backup":false,"exclude_protocol":"ssr","config_template":"","Only-nodes":false}';
+        // -------------------------
+        // JSON 提交和输出功能
+        // -------------------------
+        const initialTempJsonData = '{"subscribes":[{"url":"URL","tag":"tag_1","enabled":true,"emoji":1,"subgroup":"","prefix":"","User-Agent":"v2rayng"},{"url":"URL","tag":"tag_2","enabled":false,"emoji":0,"subgroup":"命名/named","prefix":"❤️","User-Agent":"clashmeta"}],"auto_set_outbounds_dns":{"proxy":"","direct":""},"save_config_path":"./config.json","auto_backup":false,"exclude_protocol":"ssr","config_template":"","Only-nodes":false}';
         let tempJsonData = initialTempJsonData;
+
         document.querySelector('#temp-json-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const form = e.target;
@@ -261,21 +236,25 @@
             }
         });
 
+        // -------------------------
+        // 语言切换
+        // -------------------------
         const languageData = {
-            "1": "2024-1-10: My vercel free plan Usage is almost used up by you. If you have a github account, please fork this project and use the subscription conversion website you built. Otherwise, I will decide to close this website.",
-            "2": "Prerequisite: Fill in the subscription link correctly on this web page. The failure to generate the configuration is because someone else is generating the configuration at the same time, causing the content you filled in to be cleared. It is recommended to use the form /config/URL.",
-            // 其他翻译内容保持不变
+            "1": "Prerequisite: Fill in the subscription link correctly on this web page. Failure may be due to someone else generating configuration simultaneously.",
+            "3": "Reminder: After clicking save, please immediately generate the configuration file!!!",
+            "5": "The 'subscription link' starts with 'http://' and includes node information or a single URI node link starting with 'vmess://', 'hysteria2://', etc. For multiple URIs, add '\\n' at the end of each.",
+            "9": "If there is a new hy2 protocol, modify 'User-Agent' to: clashmeta. Keep only the proxies field. Do not include large rules."
         };
 
         let isEnglish = false;
 
         function toggleLanguage() {
             isEnglish = !isEnglish;
-            const elementsToTranslate = document.querySelectorAll('[data-translate]');
-            elementsToTranslate.forEach(element => {
-                const key = element.getAttribute('data-translate');
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-translate');
                 if (isEnglish && languageData[key]) {
-                    element.textContent = languageData[key];
+                    el.textContent = languageData[key];
                 } else {
                     window.location.reload();
                 }
